@@ -4,5 +4,5 @@
 // 3. Rename this file to getImgurApiKey.dart
 
 String getImgurApiKey() {
-  return "REPLACE THIS TEXT WITH YOUR API KEY"
+  return "REPLACE THIS TEXT WITH YOUR API KEY";
 }
