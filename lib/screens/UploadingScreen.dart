@@ -56,7 +56,7 @@ class _UploadingScreenState extends State<UploadingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text("Uploading Image..."),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 16)),
+                      Padding(padding: EdgeInsets.symmetric(vertical: 8)),
                       CircularProgressIndicator(),
                     ],
                   );
