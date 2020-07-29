@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../models/ImagePickerProvider.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -17,16 +19,11 @@ class MainScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _prepareImage() async {
-    ImagePicker picker = ImagePicker();
-
-    PickedFile image = await picker.getImage(source: ImageSource.gallery);
-
-    print(image.readAsString());
-  }
-
   @override
   Widget build(BuildContext context) {
+    ImagePickerProvider imagePickerProvider =
+        Provider.of<ImagePickerProvider>(context, listen: false);
+
     return Scaffold(
       body: Center(
         child: Semantics(
@@ -41,7 +38,12 @@ class MainScreen extends StatelessWidget {
                 color: Colors.white,
               ),
               iconSize: _calculateButtonSize(context),
-              onPressed: () => _prepareImage(),
+              onPressed: () {
+                imagePickerProvider.pickImage().then(
+                      (_) => Navigator.of(context)
+                          .pushReplacementNamed("/uploading"),
+                    );
+              },
             ),
           ),
         ),
