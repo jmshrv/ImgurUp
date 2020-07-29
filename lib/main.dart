@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'screens/MainScreen.dart';
 import 'screens/UploadingScreen.dart';
 
+import 'models/ImagePickerProvider.dart';
+
 void main() {
-  runApp(ImgurUp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<ImagePickerProvider>(
+          create: (_) => ImagePickerProvider(),
+        )
+      ],
+      child: ImgurUp(),
+    ),
+  );
 }
 
 class ImgurUp extends StatelessWidget {
