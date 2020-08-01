@@ -1,4 +1,4 @@
-package com.example.imgurup
+package me.unicornsonlsd.imgurup
 
 import io.flutter.embedding.android.FlutterActivity
 
