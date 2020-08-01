@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../models/ImagePickerProvider.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -21,9 +18,6 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ImagePickerProvider imagePickerProvider =
-        Provider.of<ImagePickerProvider>(context, listen: false);
-
     return Scaffold(
       body: Center(
         child: Semantics(
@@ -39,10 +33,7 @@ class MainScreen extends StatelessWidget {
               ),
               iconSize: _calculateButtonSize(context),
               onPressed: () {
-                imagePickerProvider.pickImage().then(
-                      (_) => Navigator.of(context)
-                          .pushReplacementNamed("/uploading"),
-                    );
+                Navigator.of(context).pushReplacementNamed("/uploading");
               },
             ),
           ),
