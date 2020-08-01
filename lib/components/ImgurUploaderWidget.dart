@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:imgur/imgur.dart' as imgur;
 
-import '../models/ImgurAPI.dart';
 import '../components/getImgurApiKey.dart';
 
 class ImgurUploaderWidget extends StatefulWidget {
