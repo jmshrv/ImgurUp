@@ -26,8 +26,12 @@ class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
     final imgurClient =
         imgur.Imgur(imgur.Authentication.fromClientId(getImgurApiKey()));
 
-    PickedFile pickedFile =
-        await imagePicker.getImage(source: ImageSource.gallery);
+    PickedFile pickedFile;
+    try {
+      pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     Uint8List pickedFileBytes = await pickedFile.readAsBytes();
 
@@ -42,8 +46,13 @@ class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
           "Image size too large. Imgur only allows files up to 10MB. Your image is $humanReadableSize MB.");
     }
 
-    imgur.Image imgurResponse = await imgurClient.image
-        .uploadImage(imageBase64: base64Encode(pickedFileBytes));
+    imgur.Image imgurResponse;
+    try {
+      imgurResponse = await imgurClient.image
+          .uploadImage(imageBase64: base64Encode(pickedFileBytes));
+    } catch (e) {
+      return Future.error(e);
+    }
 
     Clipboard.setData(ClipboardData(text: imgurResponse.link));
     return imgurResponse.link;
