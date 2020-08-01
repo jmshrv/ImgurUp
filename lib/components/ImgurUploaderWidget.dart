@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,17 +18,35 @@ class ImgurUploaderWidget extends StatefulWidget {
 class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
   Future imgurUploaderWidgetFuture;
 
-  Future<void> _pickAndUploadImage() async {
+  // The amount of spacing between the completed message and button
+  final verticalPaddingAmount = 8.0;
+
+  Future<String> _pickAndUploadImage() async {
     final imagePicker = ImagePicker();
     final imgurClient =
         imgur.Imgur(imgur.Authentication.fromClientId(getImgurApiKey()));
 
     PickedFile pickedFile =
         await imagePicker.getImage(source: ImageSource.gallery);
+
+    Uint8List pickedFileBytes = await pickedFile.readAsBytes();
+
+    if (pickedFileBytes.lengthInBytes > 10485760) {
+      // Imgur only allows files up to 10MB (I'm assuming they see a MB as 1024KB since I couldn't find any info online)
+
+      // We calculate the size of the image here and round it to a human-readable level so that we don't have to do a stupidly long one-liner in the Future.error
+      double humanReadableSize = double.parse(
+          (pickedFileBytes.lengthInBytes / 1048576).toStringAsFixed(2));
+
+      return Future.error(
+          "Image size too large. Imgur only allows files up to 10MB. Your image is $humanReadableSize MB.");
+    }
+
     imgur.Image imgurResponse = await imgurClient.image
-        .uploadImage(imageBase64: base64Encode(await pickedFile.readAsBytes()));
+        .uploadImage(imageBase64: base64Encode(pickedFileBytes));
 
     Clipboard.setData(ClipboardData(text: imgurResponse.link));
+    return imgurResponse.link;
   }
 
   @override
@@ -42,32 +61,50 @@ class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
       child: FutureBuilder(
         future: imgurUploaderWidgetFuture,
         builder: (context, snapshot) {
-          print(snapshot.connectionState);
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.hasData) {
+            // If the snapshot completes with data, we're assuming that the function completed successfully and the image is uploaded
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Uploading image..."),
-                Padding(padding: EdgeInsets.symmetric(vertical: 8)),
-                CircularProgressIndicator()
+                Icon(Icons.check_circle, size: 48),
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: verticalPaddingAmount)),
+                Text(
+                  "Link copied to clipboard!",
+                  textAlign: TextAlign.center,
+                ),
+                RaisedButton(
+                  child: Text("Start Again"),
+                  onPressed: () =>
+                      Navigator.of(context).pushReplacementNamed("/"),
+                )
               ],
             );
-          } else if (snapshot.connectionState == ConnectionState.done) {
+          } else if (snapshot.hasError) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Link copied to clipboard!"),
-                Padding(padding: EdgeInsets.symmetric(vertical: 8)),
+                Icon(Icons.error, size: 48),
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: verticalPaddingAmount)),
+                Text(
+                  "An error has occured: ${snapshot.error.toString()}",
+                  textAlign: TextAlign.center,
+                ),
                 RaisedButton(
-                    child: Text("Upload Another"),
-                    onPressed: () =>
-                        Navigator.of(context).pushReplacementNamed("/"))
+                  child: Text("Start Again"),
+                  onPressed: () =>
+                      Navigator.of(context).pushReplacementNamed("/"),
+                )
               ],
             );
           } else {
-            return Text(snapshot.connectionState.toString());
+            // If the snapshot doesn't have data or an error, it's probably still uploading
+            return CircularProgressIndicator();
           }
         },
       ),
