@@ -21,6 +21,7 @@ class ImgurUp extends StatelessWidget {
         // "/uploaded": (context) => UploadedScreen()
       },
       initialRoute: "/",
+      theme: ThemeData.dark(),
     );
   }
 }

@@ -24,8 +24,9 @@ class MainScreen extends StatelessWidget {
           button: true,
           label: "Upload",
           child: Ink(
-            decoration:
-                ShapeDecoration(shape: CircleBorder(), color: Colors.lightBlue),
+            decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: Color.fromARGB(255, 28, 183, 109)),
             child: IconButton(
               icon: Icon(
                 Icons.file_upload,
