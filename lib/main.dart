@@ -14,6 +14,9 @@ class ImgurUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Imgur's shade of green (taken from inspect elementing the upload button on imgur.com)
+    final imgurGreen = Color.fromARGB(255, 27, 183, 110);
+
     return MaterialApp(
       routes: {
         "/": (context) => MainScreen(),
@@ -23,8 +26,8 @@ class ImgurUp extends StatelessWidget {
       initialRoute: "/",
       theme: ThemeData(
         brightness: Brightness.dark,
-        accentColor: Color.fromARGB(255, 28, 183, 109),
-        buttonColor: Color.fromARGB(255, 28, 183, 109),
+        accentColor: imgurGreen,
+        buttonColor: imgurGreen,
         scaffoldBackgroundColor: Colors.black,
       ),
     );
