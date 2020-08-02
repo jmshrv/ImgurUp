@@ -5,6 +5,7 @@ class MainScreen extends StatelessWidget {
 
   double _calculateButtonSize(BuildContext context) {
     // We can't just use the screen width to resize the button because if the screen is landscape, the button won't look right.
+    // This function needs the context because MediaQuery needs it.
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -23,19 +24,17 @@ class MainScreen extends StatelessWidget {
         child: Semantics(
           button: true,
           label: "Upload",
-          child: Ink(
-            decoration: ShapeDecoration(
-                shape: CircleBorder(),
-                color: Color.fromARGB(255, 28, 183, 109)),
-            child: IconButton(
-              icon: Icon(
-                Icons.file_upload,
-                color: Colors.white,
-              ),
-              iconSize: _calculateButtonSize(context),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed("/uploading");
-              },
+          child: Container(
+            width: _calculateButtonSize(context),
+            height: _calculateButtonSize(context),
+            child: FittedBox(
+              child: FloatingActionButton(
+                  child: Icon(
+                    Icons.file_upload,
+                    color: Colors.white,
+                  ),
+                  onPressed: () =>
+                      Navigator.of(context).pushReplacementNamed("/uploading")),
             ),
           ),
         ),
