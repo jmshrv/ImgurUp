@@ -21,7 +21,12 @@ class ImgurUp extends StatelessWidget {
         // "/uploaded": (context) => UploadedScreen()
       },
       initialRoute: "/",
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        accentColor: Color.fromARGB(255, 28, 183, 109),
+        buttonColor: Color.fromARGB(255, 28, 183, 109),
+        scaffoldBackgroundColor: Colors.black,
+      ),
     );
   }
 }
