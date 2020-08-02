@@ -26,7 +26,7 @@ class MainScreen extends StatelessWidget {
           label: "Upload",
           child: Container(
             width: _calculateButtonSize(context),
-            height: _calculateButtonSize(context),
+            // No need to calculate height since for this widget, width will always be equal to height.
             child: FittedBox(
               child: FloatingActionButton(
                   child: Icon(
