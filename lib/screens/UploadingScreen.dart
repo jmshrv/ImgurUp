@@ -7,9 +7,13 @@ class UploadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String imageSource = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       body: Center(
-        child: ImgurUploaderWidget(),
+        child: ImgurUploaderWidget(
+          imageSource: imageSource,
+        ),
       ),
     );
   }

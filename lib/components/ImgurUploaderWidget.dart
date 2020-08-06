@@ -9,7 +9,9 @@ import 'package:imgur/imgur.dart' as imgur;
 import '../components/getImgurApiKey.dart';
 
 class ImgurUploaderWidget extends StatefulWidget {
-  ImgurUploaderWidget({Key key}) : super(key: key);
+  ImgurUploaderWidget({Key key, @required this.imageSource}) : super(key: key);
+
+  final String imageSource;
 
   @override
   _ImgurUploaderWidgetState createState() => _ImgurUploaderWidgetState();
@@ -21,16 +23,31 @@ class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
   // The amount of spacing between the completed message and button
   final verticalPaddingAmount = 8.0;
 
-  Future<String> _pickAndUploadImage() async {
+  Future<String> _pickAndUploadImage(String imageSource) async {
     final imagePicker = ImagePicker();
     final imgurClient =
         imgur.Imgur(imgur.Authentication.fromClientId(getImgurApiKey()));
 
     PickedFile pickedFile;
-    try {
-      pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
-    } catch (e) {
-      return Future.error(e);
+
+    switch (imageSource) {
+      case "gallery":
+        try {
+          pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+        } catch (e) {
+          return Future.error(e);
+        }
+        break;
+      case "camera":
+        try {
+          pickedFile = await imagePicker.getImage(source: ImageSource.camera);
+        } catch (e) {
+          return Future.error(e);
+        }
+        break;
+      default:
+        return Future.error(
+            'imageSource must either be "gallery" or "camera". Make sure you\'ve got the right argument when switching to UploadingScreen.');
     }
 
     Uint8List pickedFileBytes = await pickedFile.readAsBytes();
@@ -61,7 +78,7 @@ class _ImgurUploaderWidgetState extends State<ImgurUploaderWidget> {
   @override
   void initState() {
     super.initState();
-    imgurUploaderWidgetFuture = _pickAndUploadImage();
+    imgurUploaderWidgetFuture = _pickAndUploadImage(widget.imageSource);
   }
 
   @override

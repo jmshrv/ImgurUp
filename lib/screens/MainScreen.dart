@@ -21,7 +21,11 @@ class MainScreen extends StatelessWidget {
                       widthFactor: 0.9,
                       child: FittedBox(
                         child: FloatingActionButton(
-                            child: Icon(Icons.camera_alt), onPressed: null),
+                            heroTag: "camera",
+                            child: Icon(Icons.camera_alt),
+                            onPressed: () => Navigator.of(context)
+                                .pushReplacementNamed("/uploading",
+                                    arguments: "camera")),
                       ),
                     ),
                     alignment: Alignment.center,
@@ -33,7 +37,11 @@ class MainScreen extends StatelessWidget {
                       widthFactor: 0.9,
                       child: FittedBox(
                         child: FloatingActionButton(
-                            child: Icon(Icons.folder), onPressed: null),
+                            heroTag: "gallery",
+                            child: Icon(Icons.folder),
+                            onPressed: () => Navigator.of(context)
+                                .pushReplacementNamed("/uploading",
+                                    arguments: "gallery")),
                       ),
                     ),
                     alignment: Alignment.center,
@@ -55,7 +63,11 @@ class MainScreen extends StatelessWidget {
                       heightFactor: 0.9,
                       child: FittedBox(
                         child: FloatingActionButton(
-                            child: Icon(Icons.camera_alt), onPressed: null),
+                            heroTag: "camera",
+                            child: Icon(Icons.camera_alt),
+                            onPressed: () => Navigator.of(context)
+                                .pushReplacementNamed("/uploading",
+                                    arguments: "camera")),
                       ),
                     ),
                     alignment: Alignment.center,
@@ -67,7 +79,11 @@ class MainScreen extends StatelessWidget {
                       heightFactor: 0.9,
                       child: FittedBox(
                         child: FloatingActionButton(
-                            child: Icon(Icons.folder), onPressed: null),
+                            heroTag: "gallery",
+                            child: Icon(Icons.folder),
+                            onPressed: () => Navigator.of(context)
+                                .pushReplacementNamed("/uploading",
+                                    arguments: "gallery")),
                       ),
                     ),
                     alignment: Alignment.center,
